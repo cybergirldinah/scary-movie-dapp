@@ -27,7 +27,7 @@ const App = () => {
 
         let moviesCleaned = [];
         movies.forEach(movie => {
-          moviesCleaned.unshift({
+          moviesCleaned.push({
             address: movie.author,
             timestamp: new Date(movie.timestamp * 1000),
             message: movie.message
@@ -37,11 +37,11 @@ const App = () => {
         setAllMovies(moviesCleaned);
 
         scaryMovieContract.on("NewMovie", (from, timestamp, message) => {
-          setAllMovies(prevState => [{
+          setAllMovies(prevState => [...prevState, {
             address: from,
             timestamp: new Date(timestamp * 1000),
             message: message
-          },...prevState ]);
+          }]);
         });
       } else {
         console.log("Ethereum object doesn't exist!")
@@ -59,14 +59,14 @@ const App = () => {
         return;
       } 
 
-      getAllMovies();
+      
       const accounts = await ethereum.request({ method: 'eth_accounts' });
 
       if (accounts.length !== 0) {
         const account = accounts[0];
         console.log("Found an authorized account:", account);
         setCurrentAccount(account)
-
+        getAllMovies();
       } else {
         console.log("No authorized account found")
       }
