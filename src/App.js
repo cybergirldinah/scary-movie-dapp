@@ -27,7 +27,7 @@ const App = () => {
 
         let moviesCleaned = [];
         movies.forEach(movie => {
-          moviesCleaned.push({
+          moviesCleaned.unshift({
             address: movie.author,
             timestamp: new Date(movie.timestamp * 1000),
             message: movie.message
@@ -37,11 +37,11 @@ const App = () => {
         setAllMovies(moviesCleaned);
 
         scaryMovieContract.on("NewMovie", (from, timestamp, message) => {
-          setAllMovies(prevState => [ {
+          setAllMovies(prevState => [{
             address: from,
             timestamp: new Date(timestamp * 1000),
             message: message
-          },...prevState]);
+          },...prevState ]);
         });
       } else {
         console.log("Ethereum object doesn't exist!")
@@ -59,13 +59,14 @@ const App = () => {
         return;
       } 
 
+      getAllMovies();
       const accounts = await ethereum.request({ method: 'eth_accounts' });
 
       if (accounts.length !== 0) {
         const account = accounts[0];
         console.log("Found an authorized account:", account);
         setCurrentAccount(account)
-        getAllMovies()
+
       } else {
         console.log("No authorized account found")
       }
@@ -87,13 +88,13 @@ const App = () => {
 
       console.log("Connected", accounts[0]);
       setCurrentAccount(accounts[0]); 
+
     } catch (error) {
       console.log(error)
     }
   }
 
   const submitMovie = async () => {
-    
     try {
       const { ethereum } = window;
 
@@ -113,7 +114,7 @@ const App = () => {
         await submitTxn.wait();
         console.log("Mined -- ", submitTxn.hash);
 
-        setButton("Submit Answer");
+        setTimeout(setButton("Submit Answer"), 3000);
         setColor();
       } else {
         console.log("Ethereum object doesn't exist!");

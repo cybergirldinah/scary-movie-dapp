@@ -78,11 +78,11 @@ p {
   border: 2px solid black;
   background-color: white;
   margin-top: 1vh; 
-  padding: 3vh;
+  padding: 2vh;
 }
 
 #addy {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 #time {
